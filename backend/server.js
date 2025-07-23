@@ -9,7 +9,7 @@ app.use(cors());
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root', // 修改为你的MySQL用户名
-  password: '', // 修改为你的MySQL密码
+  password: 'n3u3da!', // 修改为你的MySQL密码
   database: 'demo_db'
 });
 
