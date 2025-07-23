@@ -33,22 +33,31 @@ app.get('/users', (req, res) => {
 // curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d "{\"name\":\"user$(echo $RANDOM)\",\"email\":\"user$(echo $RANDOM)@test.com\"}"
 app.post('/users', (req, res) => {
   const { name, email } = req.body;
-  db.query('INSERT INTO user (name, email) VALUES (?, ?)', [name, email], (err, result) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ id: result.insertId, name, email });
-  });
+  const room_number = Math.floor(Math.random() * 900) + 100; // 随机生成三位数房间号 (100-999)
+  db.query(
+    'INSERT INTO user (name, email, room_number) VALUES (?, ?, ?)',
+    [name, email, room_number], // Use the generated random room_number
+    (err, result) => {
+      if (err) return res.status(500).json({ error: err });
+      res.json({ id: result.insertId, name, email, room_number });
+    }
+  );
 });
 
 // 修改用户
 // curl 示例：
-// curl -X PUT http://localhost:3000/users/1 -H "Content-Type: application/json" -d "{\"name\":\"新名字\",\"email\":\"newemail@test.com\"}"
+// curl -X PUT http://localhost:3000/users/1 -H "Content-Type: application/json" -d "{\"name\":\"新名字\",\"email\":\"newemail@test.com\",\"room_number\":101}"
 app.put('/users/:id', (req, res) => {
-  const { name, email } = req.body;
+  const { name, email, room_number } = req.body;
   const { id } = req.params;
-  db.query('UPDATE user SET name=?, email=? WHERE id=?', [name, email, id], (err) => {
-    if (err) return res.status(500).json({ error: err });
-    res.json({ id, name, email });
-  });
+  db.query(
+    'UPDATE user SET name=?, email=?, room_number=? WHERE id=?',
+    [name, email, room_number || null, id], // Default to NULL if room_number is not provided
+    (err) => {
+      if (err) return res.status(500).json({ error: err });
+      res.json({ id, name, email, room_number });
+    }
+  );
 });
 
 // 删除用户
