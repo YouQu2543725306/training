@@ -1,0 +1,10 @@
+-- 数据库名 demo_db
+CREATE DATABASE IF NOT EXISTS demo_db;
+USE demo_db;
+
+-- 用户表 user
+CREATE TABLE IF NOT EXISTS user (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL UNIQUE
+);

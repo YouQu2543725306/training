@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>用户管理 Demo</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    table { border-collapse: collapse; width: 400px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    input, button { margin: 4px; }
+  </style>
+</head>
+<body>
+  <h2>用户管理 Demo</h2>
+  <form id="addForm">
+    <input type="text" id="name" placeholder="姓名" required>
+    <input type="email" id="email" placeholder="邮箱" required>
+    <button type="submit">新增用户</button>
+  </form>
+  <table id="userTable">
+    <thead>
+      <tr><th>ID</th><th>姓名</th><th>邮箱</th><th>操作</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    function fetchUsers() {
+      fetch('http://localhost:3000/users')
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.querySelector('#userTable tbody');
+          tbody.innerHTML = '';
+          data.forEach(u => {
+            tbody.innerHTML += `<tr>
+              <td>${u.id}</td>
+              <td><input value="${u.name}" onchange="updateUser(${u.id}, this.value, document.getElementById('email${u.id}').value)"></td>
+              <td><input id="email${u.id}" value="${u.email}" onchange="updateUser(${u.id}, document.querySelector('tr input').value, this.value)"></td>
+              <td><button onclick="deleteUser(${u.id})">删除</button></td>
+            </tr>`;
+          });
+        });
+    }
+    fetchUsers();
+
+    document.getElementById('addForm').onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      fetch('http://localhost:3000/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
+      }).then(() => {
+        fetchUsers();
+        this.reset();
+      });
+    };
+
+    window.deleteUser = function(id) {
+      fetch(`http://localhost:3000/users/${id}`, { method: 'DELETE' })
+        .then(() => fetchUsers());
+    };
+
+    window.updateUser = function(id, name, email) {
+      fetch(`http://localhost:3000/users/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email })
+      }).then(() => fetchUsers());
+    };
+  </script>
+</body>
+</html>
