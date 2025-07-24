@@ -4,25 +4,139 @@
   <meta charset="UTF-8">
   <title>Hotel Management</title>
   <style>
-    body { font-family: 'Segoe UI', Arial; background: #f7f7fb; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 32px; }
-    h2 { text-align: center; color: #333; }
-    form { display: flex; gap: 8px; margin-bottom: 24px; justify-content: center; }
-    input[type=text], input[type=email] { padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-    button { padding: 8px 16px; border: none; border-radius: 4px; background: #4f8cff; color: #fff; cursor: pointer; transition: background 0.2s; }
-    button:hover { background: #357ae8; }
-    table { border-collapse: collapse; width: 100%; margin-top: 8px; }
-    th, td { border: 1px solid #e0e0e0; padding: 10px; text-align: left; }
-    th { background: #f0f4fa; }
-    td.actions { width: 150px; text-align: center; } /* Fixed width for actions column */
-    .actions button { margin-right: 4px; padding: 6px 10px; font-size: 12px; } /* Adjust button size */
-    .actions button:last-child { margin-right: 0; } /* Remove margin for the last button */
-    tr:nth-child(even) { background: #f9f9fc; }
-    .actions button { margin-right: 4px; }
-    .edit-row input { width: 90%; }
+    body {
+      font-family: 'Segoe UI', Arial;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+      position: relative;
+      overflow-x: hidden;
+    }
+    .background-visual {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at 20% 30%, #a8edea 0%, #fed6e3 100%);
+      opacity: 0.7;
+    }
+    .container {
+      max-width: 650px;
+      margin: 48px auto;
+      background: rgba(255,255,255,0.25);
+      border-radius: 18px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      padding: 40px 32px;
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255,255,255,0.18);
+      position: relative;
+      z-index: 1;
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      font-size: 2.2rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+      text-shadow: 0 2px 8px #fff6;
+    }
+    form {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      justify-content: center;
+    }
+    input[type=text], input[type=email] {
+      padding: 10px 12px;
+      border: 1px solid #d1d1d1;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.7);
+      box-shadow: 0 1px 4px #0001;
+      transition: border 0.2s;
+    }
+    input[type=text]:focus, input[type=email]:focus {
+      border: 1.5px solid #4f8cff;
+      outline: none;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(90deg, #4f8cff 0%, #a8edea 100%);
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 500;
+      box-shadow: 0 2px 8px #4f8cff33;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #357ae8 0%, #fed6e3 100%);
+      box-shadow: 0 4px 16px #357ae833;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 8px;
+      background: rgba(255,255,255,0.6);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px #0001;
+    }
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 12px 10px;
+      text-align: left;
+      font-size: 1rem;
+    }
+    th {
+      background: rgba(240,244,250,0.8);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    td.actions {
+      width: 150px;
+      text-align: center;
+    }
+    .actions button {
+      margin-right: 4px;
+      padding: 7px 14px;
+      font-size: 13px;
+      border-radius: 5px;
+      background: linear-gradient(90deg, #4f8cff 0%, #a8edea 100%);
+      box-shadow: 0 1px 4px #4f8cff22;
+    }
+    .actions button:last-child {
+      margin-right: 0;
+    }
+    tr:nth-child(even) {
+      background: rgba(249,249,252,0.7);
+    }
+    .edit-row input {
+      width: 90%;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid #b0c4de;
+      border-radius: 5px;
+      padding: 8px;
+    }
+    @media (max-width: 700px) {
+      .container {
+        max-width: 98vw;
+        padding: 16px 4vw;
+      }
+      table th, table td {
+        font-size: 0.95rem;
+        padding: 8px 6px;
+      }
+    }
   </style>
 </head>
 <body>
+  <div class="background-visual"></div>
   <div class="container">
     <h2>Hotel Guests Management</h2>
     <form id="addForm">
