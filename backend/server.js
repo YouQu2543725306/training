@@ -33,10 +33,10 @@ app.get('/users', (req, res) => {
 // curl -X POST http://localhost:3000/users -H "Content-Type: application/json" -d "{\"name\":\"user$(echo $RANDOM)\",\"email\":\"user$(echo $RANDOM)@test.com\"}"
 app.post('/users', (req, res) => {
   const { name, email } = req.body;
-  const room_number = Math.floor(Math.random() * 900) + 100; // 随机生成三位数房间号 (100-999)
+  const room_number = Math.floor(Math.random() * 900) + 100; 
   db.query(
     'INSERT INTO user (name, email, room_number) VALUES (?, ?, ?)',
-    [name, email, room_number], // Use the generated random room_number
+    [name, email, room_number], 
     (err, result) => {
       if (err) return res.status(500).json({ error: err });
       res.json({ id: result.insertId, name, email, room_number });

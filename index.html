@@ -24,11 +24,11 @@
 </head>
 <body>
   <div class="container">
-    <h2>User Management Demo</h2>
+    <h2>Hotel Guests Management</h2>
     <form id="addForm">
       <input type="text" id="name" placeholder="Name" required>
       <input type="email" id="email" placeholder="Email" required>
-      <button type="submit">Add User</button>
+      <button type="submit">Check In</button>
     </form>
     <table id="userTable">
       <thead>
@@ -80,7 +80,7 @@
                 <td>${u.updated_at}</td>
                 <td class='actions'>
                   <button onclick='startEdit(${u.id}, "${u.name}", "${u.email}")'>Edit</button>
-                  <button onclick='deleteUser(${u.id})'>Delete</button>
+                  <button onclick='deleteUser(${u.id})'>Check Out</button>
                 </td>
               </tr>`;
             }
